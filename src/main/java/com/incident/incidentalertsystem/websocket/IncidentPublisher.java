@@ -13,8 +13,12 @@ public class IncidentPublisher {
         this.messagingTemplate = messagingTemplate;
     }
 
-    public void publishIncident(Incident incident) {
+    public void publish(Incident incident) {
 
-        messagingTemplate.convertAndSend("/topic/incidents", incident);
+        messagingTemplate.convertAndSend(
+                "/topic/incidents",
+                incident
+        );
+
     }
 }

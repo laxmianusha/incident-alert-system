@@ -3,6 +3,7 @@ package com.incident.incidentalertsystem.service;
 import com.incident.incidentalertsystem.model.Incident;
 import com.incident.incidentalertsystem.repository.IncidentRepository;
 import com.incident.incidentalertsystem.websocket.IncidentPublisher;
+
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,20 +20,20 @@ public class IncidentService {
         this.publisher = publisher;
     }
 
-    public Incident createIncident(Incident incident) {
-
-        incident.setStatus("OPEN");
-        incident.setCreatedAt(LocalDateTime.now().toString());
-
-        Incident saved = repository.save(incident);
-
-        // Publish real-time event
-        publisher.publishIncident(saved);
-
-        return saved;
-    }
-
     public List<Incident> getAllIncidents() {
         return repository.findAll();
+    }
+
+    public Incident createIncident(Incident incident) {
+
+        incident.setCreatedAt(LocalDateTime.now().toString());
+        incident.setStatus("OPEN");
+
+        Incident savedIncident = repository.save(incident);
+
+        // Publish incident to WebSocket subscribers
+        publisher.publish(savedIncident);
+
+        return savedIncident;
     }
 }

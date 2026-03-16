@@ -16,6 +16,9 @@ public class Incident {
     private String title;
     private String category;
     private String priority;
-    private String status;
+
+    // OPEN / IN_PROGRESS / RESOLVED
+    private String status = "OPEN";
+
     private String createdAt;
 }
